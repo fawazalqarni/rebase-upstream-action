@@ -8,11 +8,11 @@ branding:
 inputs:
   upstream:
     description: <user>/<repo> or the full HTTP URL
-    required: false
+    required: true
   branch:
     description: The upstream branch that is rebased on
-    required: false
-    default:  master
+    required: true
+    default:  17.0
   depth:
     description: Greater than the number of commits the upstream made in a period
     required: false
@@ -48,7 +48,7 @@ runs:
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com";
         git config --local user.name  "GitHub Actions";
 
-        git rebase upstream/${{ inputs.branch }};
+        git rebase upstream/${{ inputs.branch }} --autostash;
 
         if [ "${{ inputs.push }}" = "true" -a "$(git status | grep diverged)" ]; then
             git push origin $(git branch --show-current) --force-with-lease;
